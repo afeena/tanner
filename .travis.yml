@@ -1,17 +1,23 @@
 sudo: required
 services:
+  - mysql
   - docker
+  - redis-server
 before_install:
   - docker pull busybox:latest
+before_script:
+  - echo "USE mysql;\nUPDATE user SET password=PASSWORD('user_pass') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
 language: python
 python:
-  - "3.5"
+  - "3.6"
 # command to install dependencies
-install: 
+install:
   - "pip install -r requirements.txt"
   - pip install coveralls
+  - docker-compose -f ./docker/docker-compose.yml up -d
 # command to run tests
 script:
     - nosetests -vv --with-coverage --cover-inclusive --cover-package=tanner
     - pycodestyle . --max-line-length=120
+    - test $(docker ps -f name=tanner -q | wc --lines) -eq 5
 after_success: coveralls
