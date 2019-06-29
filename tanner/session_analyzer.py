@@ -44,7 +44,7 @@ class SessionAnalyzer:
     async def create_stats(self, session, redis_client):
         sess_duration = session['end_time'] - session['start_time']
         referer = None
-        if sess_duration != 0:
+        if sess_duration >= 1 and session['count'] > 1:
             rps = session['count'] / sess_duration
         else:
             rps = 0
