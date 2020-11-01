@@ -24,7 +24,7 @@ SESSIONS = Table(
     meta,
     Column("id", UUID(as_uuid=True), primary_key=True, unique=True),
     Column(
-        "sensor_id", UUID(as_uuid=True), primary_key=True, index=True, nullable=False
+        "sensor_id", UUID(as_uuid=True), index=True, nullable=False
     ),
     Column("ip", INET, nullable=False),
     Column("port", Integer, nullable=False),
